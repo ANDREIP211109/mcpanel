@@ -1,0 +1,15 @@
+RewriteEngine on
+
+#accept loading of actual files and directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+#send everything else to the index page
+RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
+
+# Append .php when a file by that name exists
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L] 
+
+AddType application/x-httpd-php .php
+php_flag display_errors on
