@@ -19,5 +19,6 @@
 </head>
 <body>
     <?php require_once $page ?>
+    <?php ?>
 </body>
 </html>
