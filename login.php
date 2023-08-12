@@ -1,19 +1,26 @@
+<?php
+  if(isset($_POST['submit'])&&isset($_POST['username'])&&isset($_POST['password'])){
+    $user = Util::$db->query('SELECT * FROM users WHERE username = ? AND password = ?', array($_POST['username'], $_POST['password']))->fetchArray();
+
+    if(!$user){
+      FlashMessage::add('Username and password don\'t match');
+    }else{
+      Session::login($user['id']);
+    }
+  }
+?>
 <div class="background">
-    <div class="shape"></div>
-    <div class="shape"></div>
+  <div class="shape"></div>
+  <div class="shape"></div>
 </div>
-<form>
-    <h3>Login Here</h3>
+<form method="post">
+  <h3>Login Here</h3>
 
-    <label for="username">Username</label>
-    <input type="text" placeholder="Email or Phone" id="username">
+  <label for="username">Username</label>
+  <input type="text" placeholder="Username" id="username" name="username">
 
-    <label for="password">Password</label>
-    <input type="password" placeholder="Password" id="password">
+  <label for="password">Password</label>
+  <input type="password" placeholder="Password" id="password" name="password">
 
-    <button>Log In</button>
-    <div class="social">
-      <div class="go"><i class="fab fa-google"></i>  Google</div>
-      <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
-    </div>
+  <button class="formbtn" name="submit">Log In</button>
 </form>

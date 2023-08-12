@@ -12,6 +12,7 @@ class Util {
   static $maintenance;
   static $db;
   static $url;
+  static $flashMsg;
 
   static function init() {
     ini_set('display_errors', 1);
@@ -21,9 +22,10 @@ class Util {
     self::definePaths();
     spl_autoload_register('self::autoloadClasses');
     extension_loaded('pcntl');
+    Session::init();
+    FlashMessage::restoreFromSession();
 
     self::$db = new Db();
-
     self::$url = explode('/',$_GET['url'] ?? 'home');
   }
 
@@ -31,7 +33,7 @@ class Util {
     self::$rootPath = realpath(__DIR__ . '/..');
     $scriptName = $_SERVER['SCRIPT_NAME'];
     $pos = strrpos($scriptName, '/www/');
-    self::$wwwRoot = ($pos === false) ? '/' : substr($scriptName, 0, $pos + 5);
+    self::$wwwRoot = ($pos === false) ? '/mcpanel/' : substr($scriptName, 0, $pos + 5);
   }
 
   static function autoloadClasses($className) {

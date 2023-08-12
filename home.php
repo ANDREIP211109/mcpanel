@@ -1,3 +1,3 @@
 <?php
 
-echo "home";
+//print_r($_SESSION);
