@@ -20,10 +20,12 @@ class Util {
     error_reporting(E_ALL);
 
     self::definePaths();
-    spl_autoload_register('self::autoloadClasses');
+    @spl_autoload_register('self::autoloadClasses');
     extension_loaded('pcntl');
     Session::init();
     FlashMessage::restoreFromSession();
+
+    require_once self::$rootPath."/config.php";
 
     self::$db = new Db();
     self::$url = explode('/',$_GET['url'] ?? 'home');
