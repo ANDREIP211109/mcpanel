@@ -45,7 +45,7 @@
 					'stop'
 				).
 				';'.
-				'sleep 10;'.
+				'wait $!'.
 
 				sprintf(
 					SCREEN_KILL,
