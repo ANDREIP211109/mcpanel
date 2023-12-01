@@ -64,7 +64,7 @@
 					  </div>
 					</nav>
 					<div class="tab-content" id="nav-tabContent">
-						<?php foreach($servers as $srv){ ?>
+						<?php //foreach($servers as $srv){ ?>
 					  	<div class="tab-pane fade show active" id="nav-<?=$srv['name']?>" role="tabpanel" aria-labelledby="nav-<?=$srv['name']?>-tab">
 					  		<!-- console -->
 					  		<div class="span7">
@@ -72,124 +72,123 @@
 									<form id="frm-cmd" method="post">
 										<input type="text" id="cmd" name="cmd" maxlength="250" placeholder="Enter a command" autofocus>
 									</form>
-
-									<script type="text/javascript">
-										function refreshLog() {
-											$.post('<?=Util::$wwwRoot?>ajax.php', {
-												req: 'server_log',
-												serverdir: $('#srvdir').html()
-											}, function (data) {
-												if ($('#log').scrollTop() == $('#log')[0].scrollHeight) {
-													$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
-												} else {
-													$('#log').html(data);
-												}
-												window.setTimeout(refreshLog, 4000);
-											});
-										}
-										function refreshLogOnce() {
-											$.post('<?=Util::$wwwRoot?>ajax.php', {
-												req: 'server_log',
-												serverdir: $('#srvdir').html()
-											}, function (data) {
-												$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
-											});
-										}
-
-										function updateStatus(once) {
-											$.post('<?=Util::$wwwRoot?>ajax.php', {
-												req: 'server_running',
-												servername: $('#srvname').html()
-											}, function (data) {
-												console.log(data);
-												if (data) {
-													$('#status').html("Server Status: <i style=\"color: green;\" class=\"bi bi-circle-fill\"></i>");
-													$('#btn-srv-start').prop('disabled', true);
-													$('#btn-srv-stop,#btn-srv-restart').prop('disabled', false);
-													$('#cmd').prop('disabled', false);
-												} else {
-													$('#status').html("Server Status: <i style=\"color: red;\" class=\"bi bi-circle-fill\"></i>");
-													$('#btn-srv-start').prop('disabled', false);
-													$('#btn-srv-stop,#btn-srv-restart').prop('disabled', true);
-													$('#cmd').prop('disabled', true);
-												}
-											}, 'json');
-											if (!once)
-												window.setTimeout(updateStatus, 5000);
-										}
-
-										$(document).ready(function () {
-											updateStatus();
-											//updatePlayers();
-											$('button.ht').tooltip();
-											$('#btn-srv-start').click(function () {
-												$.post('<?=Util::$wwwRoot?>ajax.php', {
-													req: 'server_start',
-													serverid: $('#srvid').html()
-												}, function () {
-													$(this).prop('disabled', true).tooltip('hide');
-													refreshLogOnce();
-												});
-											});
-											$('#btn-srv-stop').click(function () {
-												$.post('<?=Util::$wwwRoot?>ajax.php', {
-													req: 'server_stop',
-													serverid: $('#srvid').html()
-												}, function () {
-													$(this).prop('disabled', true).tooltip('hide');
-													refreshLogOnce();
-												});
-											});
-											$('#btn-srv-restart').click(function () {
-												$.post('<?=Util::$wwwRoot?>ajax.php', {
-													req: 'server_stop',
-													serverid: $('#srvid').html()
-												}, function () {
-													refreshLogOnce();
-												});
-
-												$.post('<?=Util::$wwwRoot?>ajax.php', {
-													req: 'server_start',
-													serverid: $('#srvid').html()
-												}, function () {
-													$('').prop('disabled', true).tooltip('hide');
-													refreshLogOnce();
-												});
-											});
-											$('#frm-cmd').submit(function () {
-												$.post('<?=Util::$wwwRoot?>ajax.php', {
-													req: 'server_cmd',
-													cmd: $('#cmd').val(),
-													serverid: $('#srvid').html()
-												}, function () {
-													$('#cmd').val('').prop('disabled', false).focus();
-													refreshLogOnce();
-												});
-												$('#cmd').prop('disabled', true);
-												return false;
-											});
-
-											$('#log').css('height', $(window).height() - 200 + 'px');
-
-											// Initialize log
-											$.post('<?=Util::$wwwRoot?>ajax.php', {
-												req: 'server_log',
-												serverdir: $('#srvdir').html()
-											}, function (data) {
-												$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
-												window.setTimeout(refreshLog, 4000);
-											});
-
-											// Keep sizing correct
-											$(document).resize(function () {
-												$('#log').css('height', $(window).height() - 200 + 'px');
-											});
-										});
-									</script>
 								</div>
 					  	</div>
-					  <?php } ?>
+					  <?php// } ?>
 					</div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+	function refreshLog() {
+		$.post('<?=Util::$wwwRoot?>ajax.php', {
+			req: 'server_log',
+			serverdir: $('#srvdir').html()
+		}, function (data) {
+			if ($('#log').scrollTop() != $('#log')[0].scrollHeight) {
+				$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
+			} else {
+				$('#log').html(data);
+			}
+			window.setTimeout(refreshLog, 4000);
+		});
+	}
+	function refreshLogOnce() {
+		$.post('<?=Util::$wwwRoot?>ajax.php', {
+			req: 'server_log',
+			serverdir: $('#srvdir').html()
+		}, function (data) {
+			$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
+		});
+	}
+
+	function updateStatus(once) {
+		$.post('<?=Util::$wwwRoot?>ajax.php', {
+			req: 'server_running',
+			servername: $('#srvname').html(),
+			serverid: $('#srvid').html()
+		}, function (data) {
+			if (data) {
+				$('#status').html("Server Status: <i style=\"color: green;\" class=\"bi bi-circle-fill\"></i>");
+				$('#btn-srv-start').prop('disabled', true);
+				$('#btn-srv-stop,#btn-srv-restart').prop('disabled', false);
+				$('#cmd').prop('disabled', false);
+			} else {
+				$('#status').html("Server Status: <i style=\"color: red;\" class=\"bi bi-circle-fill\"></i>");
+				$('#btn-srv-start').prop('disabled', false);
+				$('#btn-srv-stop,#btn-srv-restart').prop('disabled', true);
+				$('#cmd').prop('disabled', true);
+			}
+		}, 'json');
+		if (!once)
+			window.setTimeout(updateStatus, 5000);
+	}
+
+	$(document).ready(function () {
+		updateStatus();
+		//updatePlayers();
+		$('button.ht').tooltip();
+		$('#btn-srv-start').click(function () {
+			$.post('<?=Util::$wwwRoot?>ajax.php', {
+				req: 'server_start',
+				serverid: $('#srvid').html()
+			}, function () {
+				$(this).prop('disabled', true).tooltip('hide');
+				refreshLogOnce();
+			});
+		});
+		$('#btn-srv-stop').click(function () {
+			$.post('<?=Util::$wwwRoot?>ajax.php', {
+				req: 'server_stop',
+				serverid: $('#srvid').html()
+			}, function () {
+				$(this).prop('disabled', true).tooltip('hide');
+				refreshLogOnce();
+			});
+		});
+		$('#btn-srv-restart').click(function () {
+			$.post('<?=Util::$wwwRoot?>ajax.php', {
+				req: 'server_stop',
+				serverid: $('#srvid').html()
+			}, function () {
+				refreshLogOnce();
+			});
+
+			$.post('<?=Util::$wwwRoot?>ajax.php', {
+				req: 'server_start',
+				serverid: $('#srvid').html()
+			}, function () {
+				$('').prop('disabled', true).tooltip('hide');
+				refreshLogOnce();
+			});
+		});
+		$('#frm-cmd').submit(function () {
+			$.post('<?=Util::$wwwRoot?>ajax.php', {
+				req: 'server_cmd',
+				cmd: $('#cmd').val(),
+				serverid: $('#srvid').html()
+			}, function () {
+				$('#cmd').val('').prop('disabled', false).focus();
+				refreshLogOnce();
+			});
+			$('#cmd').prop('disabled', true);
+			return false;
+		});
+
+		$('#log').css('height', $(window).height() - 200 + 'px');
+
+		// Initialize log
+		$.post('<?=Util::$wwwRoot?>ajax.php', {
+			req: 'server_log',
+			serverdir: $('#srvdir').html()
+		}, function (data) {
+			$('#log').html(data).scrollTop($('#log')[0].scrollHeight);
+			window.setTimeout(refreshLog, 4000);
+		});
+
+		// Keep sizing correct
+		$(document).resize(function () {
+			$('#log').css('height', $(window).height() - 200 + 'px');
+		});
+	});
+</script>

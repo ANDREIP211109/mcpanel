@@ -18,7 +18,7 @@
 			echo "No log file found.";
 		}
 	}else if($_POST['req']=='server_running'){
-		echo json_encode(!!strpos(`screen -ls`, SCREEN_PREFIX . $_POST['servername']));
+		echo json_encode(!!strpos(`screen -ls`, SCREEN_PREFIX . $_POST['servername']."-".$_POST['serverid']));
 	}else if($_POST['req']=='server_start'){
 		echo shell_exec("php {$console} {$_POST['serverid']} start 2>&1");
 	}else if($_POST['req']=='server_stop'){

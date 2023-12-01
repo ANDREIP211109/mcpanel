@@ -27,21 +27,22 @@
 
 	switch($argv[2]){
 		case 'start':
-			shell_exec(
+			echo shell_exec(
 				"cd {$dir}; ".
 				sprintf(
 					SCREEN_START,
-					escapeshellarg(SCREEN_PREFIX.$srv['name']),
+					escapeshellarg(SCREEN_PREFIX.$srv['name']."-".$srv['id']),
 					intval($srv['ram']/2),
 					$srv['ram']
-				)
+				).
+				' 2>&1'
 			);
 			break;
 		case 'stop':
 			shell_exec(
 				sprintf(
 					SCREEN_CMD,
-					SCREEN_PREFIX.$srv['name'],
+					SCREEN_PREFIX.$srv['name']."-".$srv['id'],
 					'stop'
 				).
 				';'.
@@ -49,7 +50,7 @@
 
 				sprintf(
 					SCREEN_KILL,
-					escapeshellarg(SCREEN_PREFIX.$srv['name'])
+					escapeshellarg(SCREEN_PREFIX.$srv['name']."-".$srv['id'])
 				)
 			);
 			break;
@@ -58,7 +59,7 @@
 			shell_exec(
 				sprintf(
 					SCREEN_CMD,
-					SCREEN_PREFIX.$srv['name'],
+					SCREEN_PREFIX.$srv['name']."-".$srv['id'],
 					'stop'
 				).
 				';'.
@@ -66,7 +67,7 @@
 
 				sprintf(
 					SCREEN_KILL,
-					escapeshellarg(SCREEN_PREFIX.$srv['name'])
+					escapeshellarg(SCREEN_PREFIX.$srv['name']."-".$srv['id'])
 				)
 			);
 
@@ -75,7 +76,7 @@
 				"cd {$dir}; ".
 				sprintf(
 					SCREEN_START,
-					escapeshellarg(SCREEN_PREFIX.$srv['name']),
+					escapeshellarg(SCREEN_PREFIX.$srv['name']."-".$srv['id']),
 					intval($srv['ram']/2),
 					$srv['ram']
 				)
@@ -85,7 +86,7 @@
 			shell_exec(
 				sprintf(
 					SCREEN_KILL,
-					escapeshellarg(SCREEN_PREFIX.$srv['name'])
+					escapeshellarg(SCREEN_PREFIX.$srv['name']."-".$srv['id'])
 				)
 			);
 			break;
@@ -93,7 +94,7 @@
 			echo shell_exec(
 				sprintf(
 					SCREEN_CMD, // Base command
-					SCREEN_PREFIX.$srv['name'], // Screen Name
+					SCREEN_PREFIX.$srv['name']."-".$srv['id'], // Screen Name
 					str_replace(array('\\','"'),array('\\\\','\\"'),((function_exists("get_magic_quotes_gpc") && get_magic_quotes_gpc()) ? stripslashes($argv[3]) : $argv[3])) // Server command
 				)
 			);
